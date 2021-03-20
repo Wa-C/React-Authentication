@@ -1,6 +1,8 @@
 # React Authentication
 
+##ProjectDetails : 
 
+Fakedata, API , Google map API , Private Route
 
 ## Available Scripts
 
