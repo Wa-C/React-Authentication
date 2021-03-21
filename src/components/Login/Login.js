@@ -10,10 +10,11 @@ const Login = () => {
     const history = useHistory();
     const location = useLocation();
     const { from } = location.state || { from: { pathname: "/" } };
-    
-    if (firebase.apps.length === 0 ){
-    firebase.initializeApp(firebaseConfig); }
-    
+
+    if (firebase.apps.length === 0) {
+        firebase.initializeApp(firebaseConfig);
+    }
+
     const handleGoogleSignIn = () => {
 
         var provider = new firebase.auth.GoogleAuthProvider();
@@ -23,8 +24,8 @@ const Login = () => {
                 // /** @type {firebase.auth.OAuthCredential} */
                 // var credential = result.credential;
 
-                const {displayName, email} = result.user;
-                const signedInUser = {name : displayName, email}
+                const { displayName, email } = result.user;
+                const signedInUser = { name: displayName, email }
                 setLoggedInUser(signedInUser);
                 history.replace(from);
                 // ...
@@ -39,11 +40,93 @@ const Login = () => {
 
             });
     }
+    const handleSubmit = (e) => {
+        console.log(loggedInUser.name);
+        if (loggedInUser.email && loggedInUser.password) {
+            firebase.auth().createUserWithEmailAndPassword(loggedInUser.email, loggedInUser.password)
+                .then( res=> {
+                    const newUserInfo = { ...loggedInUser };
+                    newUserInfo.error = "";
+                    newUserInfo.success = true;
+                    setLoggedInUser(newUserInfo);
+                    // ..
+                    // Signed in 
+                    // var user = userCredential.user;
+                    // ...
+                })
+                .catch((error) => {
+                    const newUserInfo = { ...loggedInUser };
+                    newUserInfo.error = error.message;
+                    newUserInfo.success = false;
+                    setLoggedInUser(newUserInfo);
+                    // ..
+                });
+        }
+        e.preventDefault();
+    }
+    const handleBlur = (e) => {
+        let isFormValid = true;
+        if (e.target.name === 'email') {
+            isFormValid = /\S+@\S+\.\S+/.test(e.target.value);
+
+        }
+        if (e.target.name === 'password') {
+            const isPasswordValid = e.target.value.length > 6;
+            const passwordHasNumber = /\d{1}/.test(e.target.value);
+            isFormValid = isPasswordValid && passwordHasNumber;
+        }
+        if (e.target.name === 'name') {
+            const isName = e.target.value;
+            isFormValid = isName;
+        }
+        if (isFormValid) {
+            const newUserInfo = { ...loggedInUser };
+            newUserInfo[e.target.name] = e.target.value;
+            setLoggedInUser(newUserInfo);
+        }
+    }
 
     return (
         <div>
             <h1>This is Login Page</h1>
+            {/* <button onClick={handleGoogleSignIn} className="btn btn-primary">Sign Up</button> */}
+
+
+
             <button onClick={handleGoogleSignIn} className="btn btn-primary">Google Sign In</button>
+            <br />
+            <br />
+            <b style={{ color: 'red' }}>or</b>
+            <br />
+            <br />
+            <input type="checkbox" name="newUser" id=""/>
+            <form className="container" onSubmit={handleSubmit}>
+                {/* <p>Email : {loggedInUser.email} </p>
+                <p>Name : {loggedInUser.name} </p>
+                <p>Password : {loggedInUser.password} </p> */}
+                <div class="form-group">
+
+                    <label for="exampleInputEmail1">Your Name</label>
+                    <input name="name" class="form-control" onBlur={handleBlur} id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Your Name" />
+
+                    <label for="exampleInputEmail1">Email address</label>
+                    <input type="email" name="email" class="form-control" onBlur={handleBlur} id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" required />
+
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" name="password" class="form-control" onBlur={handleBlur} id="exampleInputPassword1" placeholder="Password" required />
+                </div>
+
+                <br />
+
+                <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
+            </form>
+            <br />
+            <p style={{color: 'red'}}>{loggedInUser.error}</p>
+            {loggedInUser.success && <p style={{color: 'Orange'}}>User Created successfully</p>}
+
         </div>
     );
 };
