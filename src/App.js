@@ -11,7 +11,7 @@ import {
   Route
 } from "react-router-dom";
 import { createContext, useState } from 'react';
-import Bike from './components/Bike/Bike';
+import RouteSearch from './components/RouteSearch/RouteSearch';
 
 export const UserContext = createContext();
 
@@ -43,17 +43,17 @@ function App() {
         <Route exact path="/blog">
           <Blog />
           </Route>
-          <Route exact path="/bike">
-          <Bike />
+          <Route exact path="/RouteSearch">
+          <RouteSearch />
         </Route>
         <Route path="/login">
           <Login />
         </Route>
-        <Route path="/bike">
-          <Bike />
+        <Route path="/RouteSearch">
+          <RouteSearch />
         </Route>
         <Destination path="/destination/:transportType">
-          <Bike />
+          <RouteSearch />
         </Destination>
 
         <Route path="*">

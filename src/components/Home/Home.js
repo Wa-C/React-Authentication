@@ -18,69 +18,16 @@ const Home = (props) => {
 
     const history = useHistory()
     const handleRouteChange = () => {
-        history.push('/destination/bike');
+        history.push('/destination/RouteSearch');
     }
     return (
-        // <div>
-        //     <div className="row col-md-12 mt-5 mx-5 d-flex justify-content-center" >
-        //         <div class="card" style={{ width: '18rem' }} >
-        //             <img class="card-img-top" src={Frame} alt="Card image cap" />
-        //             <div class="card-body">
-
-        //                 <p onClick={handleRouteChange} class="btn btn-primary">BIKE</p>
-        //             </div>
-        //         </div>
-
-        //         <div class="card" style={{ width: '18rem' }} >
-        //             <img class="card-img-top" src={Frame1} alt="Card image cap" />
-        //             <div class="card-body">
-
-        //                 <p href="#" class="btn btn-primary">BUS</p>
-        //             </div>
-        //         </div>
-
-        //         <div class="card" style={{ width: '18rem' }} >
-        //             <img class="card-img-top" src={Frame2} alt="Card image cap" />
-        //             <div class="card-body">
-
-        //                 <p href="#" class="btn btn-primary">CAR</p>
-        //             </div>
-        //         </div>
-
-        //         <div class="card" style={{ width: '18rem' }} >
-        //             <img class="card-img-top" src={Group} alt="Card image cap" />
-        //             <div class="card-body">
-
-        //                 <p href="#" class="btn btn-primary">TRAIN</p>
-        //             </div>
-        //         </div>
-
-        //     </div>
-        //     {/* <div className="row col-md-3 mt-5 mx-5 d-flex justify-content-center" >
-        //     <div class="card"  style={{width: '18rem'}} >
-        //         <img class="card-img-top" src={Frame} alt="Card image cap" /> 
-        //             <div class="card-body">
-                        
-        //                 <a href="#" class="btn btn-primary">BIKE</a>
-        //             </div>
-        //         </div>
-                
-        //     </div> */}
-
-
-
-            <section className="col-md-8 border-end">
+            <section className="col-md-9 border-end">
                 <div className="row row-cols-4 gx-3 gy-3 ml-5">
                     {
                         transport.map(transport => <Transport  key={transport.id} transport={transport} />)
                     }
                 </div>
             </section>
-
-
-        // </div>
-
-
     );
 };
 

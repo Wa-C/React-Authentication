@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import Map from '../../imgaes/Map.png'
 
-const Bike = () => {
+const RouteSearch = () => {
     const {transportType} = useParams();
     return (
         <section className="container row d-flex justify-content-around">
@@ -12,7 +12,7 @@ const Bike = () => {
   <div class="form-group">
     <label for="exampleInputEmail1">From</label>
     <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="From"/>
-    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">To</label>
@@ -29,4 +29,4 @@ const Bike = () => {
     );
 };
 
-export default Bike;
+export default RouteSearch;
