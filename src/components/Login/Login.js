@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import firebase from "firebase/app";
 import "firebase/auth";
 import firebaseConfig from './firebase.config';
@@ -6,6 +6,7 @@ import { UserContext } from '../../App';
 import { useHistory, useLocation } from 'react-router';
 
 const Login = () => {
+    const [newUser, setNewUser] = useState(false);
     const [loggedInUser, setLoggedInUser] = useContext(UserContext);
     const history = useHistory();
     const location = useLocation();
@@ -42,13 +43,14 @@ const Login = () => {
     }
     const handleSubmit = (e) => {
         console.log(loggedInUser.name);
-        if (loggedInUser.email && loggedInUser.password) {
+        if (newUser && loggedInUser.email && loggedInUser.password) {
             firebase.auth().createUserWithEmailAndPassword(loggedInUser.email, loggedInUser.password)
-                .then( res=> {
+                .then(res => {
                     const newUserInfo = { ...loggedInUser };
                     newUserInfo.error = "";
                     newUserInfo.success = true;
                     setLoggedInUser(newUserInfo);
+                    updateUserName(loggedInUser.name);
                     // ..
                     // Signed in 
                     // var user = userCredential.user;
@@ -62,8 +64,40 @@ const Login = () => {
                     // ..
                 });
         }
+        if (!newUser && loggedInUser.email && loggedInUser.password) {
+            firebase.auth().signInWithEmailAndPassword(loggedInUser.email, loggedInUser.password)
+                .then(res => {
+                    const newUserInfo = { ...loggedInUser };
+                    newUserInfo.error = "";
+                    newUserInfo.success = true;
+                    setLoggedInUser(newUserInfo);
+                    history.replace(from);
+                    console.log('sign in user info', res.user);
+                    // Signed in
+                    // var user = userCredential.user;
+                    // ...
+                })
+                .catch((error) => {
+                    const newUserInfo = { ...loggedInUser };
+                    newUserInfo.error = error.message;
+                    newUserInfo.success = false;
+                    setLoggedInUser(newUserInfo);
+                });
+        }
         e.preventDefault();
     }
+
+    const updateUserName = name => {
+        const user = firebase.auth().currentUser;
+        user.updateProfile({
+            displayName: name
+        }).then (function() {
+            console.log("name updated");
+        }).catch(function(error) {
+            console.log(error);
+        })
+    }
+
     const handleBlur = (e) => {
         let isFormValid = true;
         if (e.target.name === 'email') {
@@ -99,15 +133,18 @@ const Login = () => {
             <b style={{ color: 'red' }}>or</b>
             <br />
             <br />
-            <input type="checkbox" name="newUser" id=""/>
+            <input type="checkbox" onChange={() => setNewUser(!newUser)} name="newUser" id="" />
+            <label htmlFor="newUser">New User Sign Up</label>
             <form className="container" onSubmit={handleSubmit}>
                 {/* <p>Email : {loggedInUser.email} </p>
                 <p>Name : {loggedInUser.name} </p>
                 <p>Password : {loggedInUser.password} </p> */}
                 <div class="form-group">
-
-                    <label for="exampleInputEmail1">Your Name</label>
-                    <input name="name" class="form-control" onBlur={handleBlur} id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Your Name" />
+                    {newUser && <div>
+                        <label for="exampleInputEmail1">Your Name</label>
+                        <input name="name" class="form-control" onBlur={handleBlur} id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Your Name" />
+                    </div>
+                    }
 
                     <label for="exampleInputEmail1">Email address</label>
                     <input type="email" name="email" class="form-control" onBlur={handleBlur} id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" required />
@@ -121,11 +158,11 @@ const Login = () => {
 
                 <br />
 
-                <button type="submit" value="Submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">{newUser ? 'Sign Up' : 'Sign In'}</button>
             </form>
             <br />
-            <p style={{color: 'red'}}>{loggedInUser.error}</p>
-            {loggedInUser.success && <p style={{color: 'Orange'}}>User Created successfully</p>}
+            <p style={{ color: 'red' }}>{loggedInUser.error}</p>
+            {loggedInUser.success && <p style={{ color: 'Orange' }}>User {newUser ?    'Created' : 'logged In'}successfully</p>}
 
         </div>
     );

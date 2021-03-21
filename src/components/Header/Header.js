@@ -18,9 +18,9 @@ const Header = () => {
       <li class="nav-item active">
         <Link to="/home" class="nav-link" >Home <span class="sr-only"></span></Link>
       </li>
-      <li class="nav-item">
+      {/* <li class="nav-item">
       <Link to="/destination" class="nav-link" >Destination</Link>
-      </li>
+      </li> */}
       <li class="nav-item">
       <Link to="/blog"class="nav-link">Blog</Link>
       </li>
@@ -28,7 +28,7 @@ const Header = () => {
       <Link to="/login" class="nav-link ">Login</Link>
       </li>
       <li class="nav-item">
-      <Link to="/home" class="nav-link ">ID:{loggedInUser.name}</Link>
+      <Link to="/home" class="nav-link ">ID:{loggedInUser.email}</Link>
       </li>
     </ul>
   </div>

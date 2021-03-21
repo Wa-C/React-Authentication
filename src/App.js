@@ -11,6 +11,7 @@ import {
   Route
 } from "react-router-dom";
 import { createContext, useState } from 'react';
+import Bike from './components/Bike/Bike';
 
 export const UserContext = createContext();
 
@@ -19,6 +20,7 @@ export const UserContext = createContext();
 function App() {
   const [loggedInUser, setLoggedInUser] = useState({
     name : '',
+    newUser: false,
     email: '',
     password: '',
     photo: '',
@@ -40,12 +42,18 @@ function App() {
         </Route>
         <Route exact path="/blog">
           <Blog />
+          </Route>
+          <Route exact path="/bike">
+          <Bike />
         </Route>
         <Route path="/login">
           <Login />
         </Route>
-        <Destination path="/destination">
-          <Destination />
+        <Route path="/bike">
+          <Bike />
+        </Route>
+        <Destination path="/destination/:transportType">
+          <Bike />
         </Destination>
 
         <Route path="*">
